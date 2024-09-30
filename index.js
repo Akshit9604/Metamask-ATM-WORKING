@@ -58,63 +58,72 @@ export default function HomePage() {
     }
   };
 
-  const deposit = async () => {
+  const deposit = async (amount) => {
     if (atm) {
-      let tx = await atm.deposit(1);
+      let tx = await atm.deposit(amount);
       await tx.wait();
       getBalance();
     }
   };
 
-  const withdraw = async () => {
+  const withdraw = async (amount) => {
     if (atm) {
-      let tx = await atm.withdraw(1);
+      let tx = await atm.withdraw(amount);
       await tx.wait();
       getBalance();
     }
   };
 
-  const deposit2 = async () => {
+  const payFuel = async (amount) => {
     if (atm) {
-      let tx = await atm.deposit(2);
+      let tx = await atm.payFuel(amount);
       await tx.wait();
       getBalance();
     }
   };
 
-  const withdraw2 = async () => {
+  const payInsurance = async (amount) => {
     if (atm) {
-      let tx = await atm.withdraw(2);
+      let tx = await atm.payInsurance(amount);
+      await tx.wait();
+      getBalance();
+    }
+  };
+
+  const payRent = async (amount) => {
+    if (atm) {
+      let tx = await atm.payRent(amount);
       await tx.wait();
       getBalance();
     }
   };
 
   const initUser = () => {
-    // Check to see if user has Metamask
     if (!ethWallet) {
       return <p>Please install Metamask in order to use this ATM.</p>;
     }
 
-    // Check to see if user is connected. If not, connect to their account
     if (!account) {
-      return <button onClick={connectAccount} style={{fontFamily:'cursive', backgroundColor: '#4874FF', color: 'black', border: '10px', padding: '10px 20px', cursor: 'pointer',fontsize:'20px',borderRadius:'40px',fontWeight:'bolder' }}>Link Your Metamask Wallet to Metacrafters</button>;
+      return <button onClick={connectAccount} className="btn">Link Your Metamask Wallet</button>;
     }
 
-    if (balance == undefined) {
+    if (balance === undefined) {
       getBalance();
     }
 
     return (
       <div>
-        <button style={{fontFamily:'cursive',backgroundColor: '#FFFF00', color: 'black', border: '10px', padding: '10px 20px', cursor: 'pointer',fontsize:'20px',borderRadius:'40px',fontWeight:'bolder'}}>Account I'D: {account}</button>
-        <p></p><button style={{fontFamily:'cursive',backgroundColor: '#FFFF00', color: 'black', border: '10px', padding: '10px 20px', cursor: 'pointer',fontsize:'20px',borderRadius:'40px',fontWeight:'bolder'}}>Remaining Balance : {balance}</button>
-        <p></p>
-        <button onClick={deposit} style={{ fontFamily:'cursive',backgroundColor: 'plum', color: 'black', border: '10px', padding: '10px 20px', cursor: 'pointer',fontsize:'20px',borderRadius:'40px',fontWeight:'bolder' }}>Deposit 1 ETH</button>
-        <button onClick={withdraw} style={{fontFamily:'cursive', backgroundColor: 'plum', color: 'black', border: '10px', padding: '10px 20px', cursor: 'pointer',fontsize:'20px',borderRadius:'40px',fontWeight:'bolder' }}>Withdraw 1 ETH</button>
-        <button onClick={deposit2} style={{ fontFamily:'cursive',backgroundColor: 'plum', color: 'black', border: '10px', padding: '10px 20px', cursor: 'pointer',fontsize:'20px',borderRadius:'40px',fontWeight:'bolder' }}>Deposit 2 ETH</button>
-        <button onClick={withdraw2} style={{fontFamily:'cursive', backgroundColor: 'plum', color: 'black', border: '10px', padding: '10px 20px', cursor: 'pointer',fontsize:'20px',borderRadius:'40px',fontWeight:'bolder' }}>Withdraw 2 ETH</button>
-
+        <button className="info-btn">Account ID: {account}</button>
+        <button className="info-btn">Remaining Balance: {balance}</button>
+        <div className="action-buttons">
+          <button onClick={() => deposit(1)} className="action-btn">Deposit 1 ETH</button>
+          <button onClick={() => withdraw(1)} className="action-btn">Withdraw 1 ETH</button>
+          <button onClick={() => deposit(2)} className="action-btn">Deposit 2 ETH</button>
+          <button onClick={() => withdraw(2)} className="action-btn">Withdraw 2 ETH</button>
+          <button onClick={() => payFuel(1)} className="action-btn">Pay Fuel (1 ETH)</button>
+          <button onClick={() => payInsurance(1)} className="action-btn">Pay Insurance (1 ETH)</button>
+          <button onClick={() => payRent(1)} className="action-btn">Pay Rent (1 ETH)</button>
+        </div>
       </div>
     );
   };
@@ -126,20 +135,42 @@ export default function HomePage() {
   return (
     <main className="container">
       <header>
-        <h1>Hello ! , Metacrafters ATM welcomes you on behalf of METAMASK</h1>
+        <h1>Hello! Metacrafters ATM welcomes you on behalf of METAMASK</h1>
       </header>
       {initUser()}
       <style jsx>{`
-  .container {
-    text-align: center;
-    font-Family: sans-serif;
-    background-color: #48E0FF;
-    padding: 280px;
-  }
-  
-
-`}</style>
-
+        .container {
+          text-align: center;
+          font-family: sans-serif;
+          background-color: #48E0FF;
+          padding: 280px;
+        }
+        .btn, .info-btn, .action-btn {
+          font-family: cursive;
+          color: black;
+          border: 10px solid;
+          padding: 10px 20px;
+          cursor: pointer;
+          font-size: 20px;
+          border-radius: 40px;
+          font-weight: bolder;
+          margin: 10px;
+        }
+        .btn {
+          background-color: #4874FF;
+        }
+        .info-btn {
+          background-color: #FFFF00;
+        }
+        .action-btn {
+          background-color: plum;
+        }
+        .action-buttons {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+      `}</style>
     </main>
   );
 }
